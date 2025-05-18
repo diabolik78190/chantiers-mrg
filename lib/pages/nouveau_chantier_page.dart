@@ -10,6 +10,7 @@ class NouveauChantierPage extends StatefulWidget {
 
 class _NouveauChantierPageState extends State<NouveauChantierPage> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _adresseController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -17,25 +18,34 @@ class _NouveauChantierPageState extends State<NouveauChantierPage> {
   bool _isSaving = false;
 
   Future<void> _ajouterChantier() async {
-    if (!_formKey.currentState!.validate()) return;
+    print("Début ajout chantier...");
+
+    if (!_formKey.currentState!.validate()) {
+      print("Validation échouée.");
+      return;
+    }
 
     setState(() {
       _isSaving = true;
     });
+    print("Sauvegarde en cours...");
 
     try {
       await FirebaseFirestore.instance.collection('chantiers').add({
         'nom': _nomController.text.trim(),
         'adresse': _adresseController.text.trim(),
         'description': _descriptionController.text.trim(),
-        'dateCreation': Timestamp.now(),
+        'dateAjout': Timestamp.now(),
         'termine': false,
       });
-      // Après ajout, revenir en arrière avec succès
+      print("Chantier ajouté avec succès.");
+
       if (mounted) {
         Navigator.pop(context);
       }
     } catch (e) {
+      print("Erreur ajout chantier : $e");
+
       setState(() {
         _isSaving = false;
       });
@@ -63,7 +73,7 @@ class _NouveauChantierPageState extends State<NouveauChantierPage> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 controller: _nomController,
@@ -87,11 +97,11 @@ class _NouveauChantierPageState extends State<NouveauChantierPage> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                maxLines: 3,
                 decoration: const InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(),
                 ),
+                maxLines: 3,
               ),
               const SizedBox(height: 24),
               ElevatedButton(

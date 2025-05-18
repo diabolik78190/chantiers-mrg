@@ -71,4 +71,5 @@ class DefaultFirebaseOptions {
     authDomain: 'chantiers-mrg.firebaseapp.com',
     storageBucket: 'chantiers-mrg.firebasestorage.app',
   );
+
 }

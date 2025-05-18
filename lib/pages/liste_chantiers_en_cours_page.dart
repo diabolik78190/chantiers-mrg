@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'detail_chantier_page.dart'; // N'oublie pas l'import
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListeChantiersEnCoursPage extends StatelessWidget {
-  const ListeChantiersEnCoursPage({Key? key}) : super(key: key);
-
-  // Exemple de données en dur pour tester
-  final List<Map<String, String>> chantiers = const [
-    {'id': '1', 'nom': 'Chantier A'},
-    {'id': '2', 'nom': 'Chantier B'},
-    {'id': '3', 'nom': 'Chantier C'},
-  ];
+  const ListeChantiersEnCoursPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,23 +10,32 @@ class ListeChantiersEnCoursPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Chantiers en cours'),
       ),
-      body: ListView.builder(
-        itemCount: chantiers.length,
-        itemBuilder: (context, index) {
-          final chantier = chantiers[index];
-          return ListTile(
-            leading: Icon(Icons.construction),
-            title: Text(chantier['nom']!),
-            onTap: () {
-              // Ici on navigue vers la page détail chantier en passant id et nom
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailChantierPage(
-                    chantierId: chantier['id']!,
-                    chantierNom: chantier['nom']!,
-                  ),
-                ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('chantiers')
+            .where('termine', isEqualTo: false)
+        // .orderBy('dateAjout', descending: true) // <-- Commenté pour test
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Erreur : ${snapshot.error}'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final docs = snapshot.data?.docs ?? [];
+          if (docs.isEmpty) {
+            return const Center(child: Text('Aucun chantier en cours'));
+          }
+          return ListView.builder(
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final chantier = docs[index].data() as Map<String, dynamic>;
+              final nom = chantier['nom'] ?? 'Sans nom';
+              final adresse = chantier['adresse'] ?? 'Sans adresse';
+              return ListTile(
+                title: Text(nom),
+                subtitle: Text(adresse),
               );
             },
           );

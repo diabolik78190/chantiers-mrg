@@ -6,7 +6,6 @@ import 'firebase_options.dart';
 import 'pages/connexion_page.dart';
 import 'pages/liste_salaries_page.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
