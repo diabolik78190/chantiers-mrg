@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "562505786244",
+    "project_id": "chantiers-mrg",
+    "storage_bucket": "chantiers-mrg.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562505786244:android:779b058be4844fdb9933d1",
+        "android_client_info": {
+          "package_name": "com.example.chantiers_mrg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANkLzU8VYUps59vPJDyzMjXbJLsM9A_1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562505786244:android:01eb54852d98a7c49933d1",
+        "android_client_info": {
+          "package_name": "com.example.gestion_chantier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANkLzU8VYUps59vPJDyzMjXbJLsM9A_1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
